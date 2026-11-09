@@ -4,6 +4,8 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
@@ -11,10 +13,24 @@ import java.util.concurrent.TimeUnit
 data class MedicalRequest(val description: String)
 data class MedicalResponse(val category: String, val advice: String)
 
+data class HistoryItem(
+    val id: String,
+    val timestamp: String,
+    val description: String,
+    val category: String,
+    val advice: String
+)
+
 // Інтерфейс API
 interface ApiService {
     @POST("api/ai-guide")
     suspend fun getAiAdvice(@Body request: MedicalRequest): MedicalResponse
+
+    @GET("api/history")
+    suspend fun getHistory(): List<HistoryItem>
+
+    @DELETE("api/history")
+    suspend fun clearHistory(): Map<String, String>
 }
 
 // Налаштування Retrofit
